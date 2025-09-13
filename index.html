@@ -1,0 +1,179 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAOS $YMPHONY - Servidor Discord</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2f3136 0%, #202225 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+            margin: 0;
+        }
+        .hero {
+            background: url('https://source.unsplash.com/random/1920x1080/?cyberpunk,gaming') no-repeat center center/cover;
+            position: relative;
+            isolation: isolate;
+            padding: 80px 0;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(47, 49, 54, 0.8);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(90deg, #5865F2, #8EA1E1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .feature-card {
+            background: #36393f;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #5865F2;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
+        }
+        .invite-button {
+            background: linear-gradient(90deg, #5865F2, #7289DA);
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .invite-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(88, 101, 242, 0.5);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content container mx-auto px-4 text-center">
+            <h1 class="title mb-4 animate-fadeIn">CHAOS $YMPHONY</h1>
+            <p class="text-xl md:text-2xl mb-8 animate-fadeIn" style="animation-delay: 0.2s;">
+                Mergulhe no caos harmonioso! Um servidor Discord para jogos no Roblox, conversas épicas e troca de ideias.
+            </p>
+            <a href="https://discord.gg/duYhGUfdbn" class="invite-button inline-block text-lg text-white py-4 px-10 rounded-lg shadow-lg animate-fadeIn" style="animation-delay: 0.4s;">
+                Entrar no Servidor
+            </a>
+        </div>
+    </header>
+
+    <section id="about" class="py-20 container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 animate-fadeIn">Sobre o CHAOS $YMPHONY</h2>
+        <p class="text-lg md:text-xl text-center max-w-3xl mx-auto animate-fadeIn" style="animation-delay: 0.2s;">
+            No CHAOS $YMPHONY, a diversão nunca para! Somos uma comunidade vibrante onde você pode jogar Roblox, compartilhar memes, debater ideias e participar de eventos únicos. Entre no ritmo e faça parte do caos!
+        </p>
+    </section>
+
+    <section id="features" class="py-20 bg-gray-800/30">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-fadeIn">O que oferecemos?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="feature-card p-8 animate-fadeIn" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-semibold mb-4">Conversas Vibrantes</h3>
+                    <p>Canais para todos os gostos: de papos casuais a discussões nerds e memes épicos.</p>
+                </div>
+                <div class="feature-card p-8 animate-fadeIn" style="animation-delay: 0.4s;">
+                    <h3 class="text-2xl font-semibold mb-4">Roblox Mania</h3>
+                    <p>Jogue com a galera, organize partidas e mostre suas habilidades no Roblox.</p>
+                </div>
+                <div class="feature-card p-8 animate-fadeIn" style="animation-delay: 0.6s;">
+                    <h3 class="text-2xl font-semibold mb-4">Ideias em Ação</h3>
+                    <p>Espaço para criar, colaborar e transformar suas ideias em algo incrível.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="community" class="py-20 container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-10 animate-fadeIn">Junte-se à Comunidade</h2>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8 animate-fadeIn" style="animation-delay: 0.2s;">
+            Somos uma comunidade apaixonada por jogos e criatividade. Venha fazer parte do CHAOS $YMPHONY e traga sua energia para nossa sinfonia!
+        </p>
+        <a href="https://discord.gg/duYhGUfdbn" class="invite-button inline-block text-lg text-white py-4 px-10 rounded-lg shadow-lg animate-fadeIn" style="animation-delay: 0.4s;">
+            Começar Agora
+        </a>
+    </section>
+
+    <footer class="py-10 bg-gray-900 text-center">
+        <p class="text-sm">&copy; 2025 CHAOS $YMPHONY. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Scroll suave para links âncora
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Checa se JavaScript está habilitado
+        document.body.classList.add('js-enabled');
+        if (!document.body.classList.contains('js-enabled')) {
+            document.body.innerHTML = '<p class="text-center text-xl mt-10">Você precisa habilitar o JavaScript para visualizar este site.</p>';
+        }
+    </script>
